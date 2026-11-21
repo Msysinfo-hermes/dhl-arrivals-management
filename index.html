@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portail de gestion des arrivages DHL">
+  <title>DHL Arrivals Management</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="header-left">
+        <div class="logo">DHL</div>
+        <div class="header-text">
+          <h1>Arrivals Management</h1>
+          <span class="header-subtitle">DHL Portal</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="header-btn" id="add-arrival-btn" title="Ajouter un arrivage">+</button>
+        <span class="header-avatar">DM</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-view="list">
+          <span class="nav-icon">≡</span>
+          <span class="nav-label">Liste des arrivages</span>
+        </a>
+        <a href="#" class="nav-item" data-view="search">
+          <span class="nav-icon">⌕</span>
+          <span class="nav-label">Rechercher</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Content Area -->
+    <div class="content" id="content-area">
+
+      <!-- List View -->
+      <section class="view active" id="list-view">
+        <div class="view-header">
+          <h2>Tous les arrivages</h2>
+          <div class="list-summary" id="list-summary">
+            <span class="summary-item"><strong id="count-total">0</strong> arrivages</span>
+            <span class="summary-item"><strong id="count-pending">0</strong> en attente</span>
+            <span class="summary-item"><strong id="count-in-transit">0</strong> en transit</span>
+            <span class="summary-item"><strong id="count-delivered">0</strong> livrés</span>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="arrivals-table">
+            <thead>
+              <tr>
+                <th>AWB / Tracking</th>
+                <th>Expéditeur</th>
+                <th>Origine</th>
+                <th>Date arrivage</th>
+                <th>Statut</th>
+                <th>Pièces jointes</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="arrivals-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="empty-state" id="empty-state" style="display:none;">
+          <div class="empty-icon">📦</div>
+          <p>Aucun arrivage pour le moment</p>
+          <small>Ajoutez un arrivage pour commencer</small>
+        </div>
+      </section>
+
+      <!-- Search View -->
+      <section class="view" id="search-view">
+        <div class="view-header">
+          <h2>Rechercher un arrivage</h2>
+        </div>
+        <div class="search-container">
+          <div class="search-bar">
+            <span class="search-icon">⌕</span>
+            <input type="text" class="search-input" id="search-input" placeholder="Rechercher par AWB, expéditeur, origine..." autocomplete="off">
+            <kbd class="search-shortcut">⌘ K</kbd>
+          </div>
+          <div class="search-results" id="search-results"></div>
+        </div>
+      </section>
+
+      <!-- Detail View -->
+      <section class="view" id="detail-view">
+        <div class="detail-back">
+          <button class="back-btn" id="back-btn">← Retour à la liste</button>
+        </div>
+        <div class="detail-content" id="detail-content">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Add Arrival Modal -->
+  <div class="modal-overlay" id="add-modal" style="display:none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Nouvel arrivage</h3>
+        <button class="modal-close" data-modal="add-modal">×</button>
+      </div>
+      <form class="modal-form" id="add-form">
+        <div class="form-group">
+          <label for="awb">AWB / Tracking Number</label>
+          <input type="text" id="awb" name="awb" required placeholder="Ex: 1234567890">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="sender">Expéditeur</label>
+            <input type="text" id="sender" name="sender" required placeholder="Nom de l'expéditeur">
+          </div>
+          <div class="form-group">
+            <label for="origin">Origine</label>
+            <input type="text" id="origin" name="origin" required placeholder="Ville / Pays">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="status">Statut</label>
+            <select id="status" name="status">
+              <option value="pending">En attente</option>
+              <option value="in-transit">En transit</option>
+              <option value="delivered">Livré</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="arrival-date">Date d'arrivage</label>
+            <input type="date" id="arrival-date" name="arrivalDate" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="notes">Notes (optionnel)</label>
+          <textarea id="notes" name="notes" rows="2" placeholder="Informations supplémentaires..."></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" data-modal="add-modal">Annuler</button>
+          <button type="submit" class="btn-primary">Créer l'arrivage</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Detail Modal for documents preview -->
+  <div class="modal-overlay" id="doc-modal" style="display:none;">
+    <div class="modal modal-doc">
+      <div class="modal-header">
+        <h3 id="doc-title">Document</h3>
+        <button class="modal-close" data-modal="doc-modal">×</button>
+      </div>
+      <div class="doc-viewer" id="doc-viewer">
+        <p class="doc-placeholder">Aperçu du document</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>
