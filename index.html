@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Portail de gestion des arrivages DHL">
-  <title>DHL Arrivals Management</title>
+  <meta name="description" content="Portail de gestion des arrivages DHL — Maroc Systèmes Informatiques">
+  <title>DHL Arrivals Management — MSI</title>
   <link rel="stylesheet" href="assets/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -14,10 +14,10 @@
   <header class="header">
     <div class="header-content">
       <div class="header-left">
-        <div class="logo">DHL</div>
+        <img src="assets/logo-msi.jpg" alt="MSI Logo" class="logo-img">
         <div class="header-text">
-          <h1>Arrivals Management</h1>
-          <span class="header-subtitle">DHL Portal</span>
+          <h1>DHL Arrivals Management</h1>
+          <span class="header-subtitle">Maroc Systèmes Informatiques SARL</span>
         </div>
       </div>
       <div class="header-right">
@@ -36,9 +36,9 @@
           <span class="nav-icon">≡</span>
           <span class="nav-label">Liste des arrivages</span>
         </a>
-        <a href="#" class="nav-item" data-view="search">
+        <a href="#" class="nav-item" data-view="pieces">
           <span class="nav-icon">⌕</span>
-          <span class="nav-label">Rechercher</span>
+          <span class="nav-label">Rechercher une pièce</span>
         </a>
       </nav>
     </aside>
@@ -48,6 +48,9 @@
 
       <!-- List View -->
       <section class="view active" id="list-view">
+        <!-- KPI Status Cards -->
+        <div class="status-cards" id="status-cards"></div>
+
         <div class="view-header">
           <h2>Tous les arrivages</h2>
           <div class="list-summary" id="list-summary">
@@ -58,16 +61,14 @@
           </div>
         </div>
 
-        <div class="table-wrapper">
+        <div class="table-wrapper" id="table-wrapper">
           <table class="arrivals-table">
             <thead>
               <tr>
                 <th>AWB / Tracking</th>
-                <th>Expéditeur</th>
-                <th>Origine</th>
                 <th>Date arrivage</th>
                 <th>Statut</th>
-                <th>Pièces jointes</th>
+                <th>Nombre de Pièces</th>
                 <th></th>
               </tr>
             </thead>
@@ -84,18 +85,20 @@
         </div>
       </section>
 
-      <!-- Search View -->
-      <section class="view" id="search-view">
+      <!-- Pieces Search View -->
+      <section class="view" id="pieces-view">
         <div class="view-header">
-          <h2>Rechercher un arrivage</h2>
+          <h2>Rechercher une pièce</h2>
+          <p class="muted">Recherchez par numéro OD ou Part Number</p>
         </div>
-        <div class="search-container">
-          <div class="search-bar">
-            <span class="search-icon">⌕</span>
-            <input type="text" class="search-input" id="search-input" placeholder="Rechercher par AWB, expéditeur, origine..." autocomplete="off">
-            <kbd class="search-shortcut">⌘ K</kbd>
+        <div class="pieces-page-search">
+          <div class="pieces-search-row">
+            <input type="text" id="pieces-search-input" class="pieces-search-input" placeholder="Saisir un numéro OD ou Part Number..." autocomplete="off">
+            <button class="btn-primary" id="pieces-search-btn">Rechercher</button>
           </div>
-          <div class="search-results" id="search-results"></div>
+          <div class="pieces-results" id="pieces-results">
+            <p class="muted">Entrez un numéro OD pour rechercher les pièces.</p>
+          </div>
         </div>
       </section>
 
@@ -111,6 +114,11 @@
 
     </div>
   </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Copyrights Maroc Systèmes Informatiques SARL ®</p>
+  </footer>
 
   <!-- Add Arrival Modal -->
   <div class="modal-overlay" id="add-modal" style="display:none;">
